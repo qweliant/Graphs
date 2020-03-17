@@ -6,14 +6,27 @@ from util import Stack, Queue  # These may come in handy
 
 class Queue:
     def __init__(self):
-        self.storage = []
+        self.queue = []
 
     def enqueue(self, value):
-        self.storage.append(value)
+        self.queue.append(value)
 
     def dequeue(self):
-        if len(self.storage) > 0:
-            return self.storage.pop(0)
+        if len(self.queue) > 0:
+            return self.queue.pop(0)
+        else:
+            return None
+
+class Stack:
+    def __init__(self):
+        self.stack = []
+
+    def push(self, value):
+        self.stack.append(value)
+
+    def pop(self):
+        if len(self.stack) > 0:
+            return self.stack.pop()
         else:
             return None
 
@@ -55,16 +68,21 @@ class Graph:
         Print each vertex in breadth-first order
         beginning from starting_vertex.
         """
-        q = Queue()
-        visited = set()
-        q.enqueue(starting_node)
-        while len(q.storage) > 0:
-            node = q.dequeue()
-            visited.add(node)
+        # https://stackoverflow.com/questions/16506429/check-if-element-is-already-in-a-queue
+        queue = Queue() # initialize queue with class since its hard to iterate over Queue without violating best practices
+        visited = set() # set visted to empty set
+        queue.enqueue(starting_vertex) # add node to queue
+
+        while len(queue.storage) > 0: # while q is not empty
+            node = queue.dequeue() # pop that node off
+            visited.add(node) # add to visited 
             print(node)
-            for child in self.vertices[node]:
-                if child not in visited and child not in q.storage:
-                    q.enqueue(child)
+            for child in self.vertices[node]: # for child in the node
+                if child not in visited and child not in queue.queue: # if child has not been vistied, and child has not in the queue, add child to queue
+                    queue.enqueue(child)
+
+            # fifo behaviour arises from the search
+        print(visited)
 
 
     def dft(self, starting_vertex):
@@ -72,7 +90,20 @@ class Graph:
         Print each vertex in depth-first order
         beginning from starting_vertex.
         """
-        pass  # TODO
+        stack = Stack()
+        visited = set()
+        stack.push(starting_vertex)
+        while len(stack.storage) > 0:
+            # Pop a node from the stack
+            node = stack.pop()
+            # Mark it as visited
+            visited.add(node)
+            print(node)
+            for child in self.vertices[node]:
+                if child not in visited and child not in stack.stack:
+                    q.push(child)
+        # filo behaviour arises from the search 
+        
 
     def dft_recursive(self, starting_vertex):
         """
