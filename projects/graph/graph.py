@@ -1,7 +1,10 @@
 """
 Simple graph implementation
 """
-from util import Stack, Queue  # These may come in handy
+
+import sys
+sys.path.append('../')
+from graph.util import Stack, Queue  # These may come in handy
 
 
 class Graph:
