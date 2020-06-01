@@ -1,6 +1,13 @@
+import random
+import sys
+sys.path.append('../')
+
+from graph.util import Stack, Queue
+
 class User:
     def __init__(self, name):
         self.name = name
+
 
 class SocialGraph:
     def __init__(self):
@@ -45,8 +52,26 @@ class SocialGraph:
         # !!!! IMPLEMENT ME
 
         # Add users
+        for user in range(num_users):
+            self.add_user(user)
 
         # Create friendships
+        possible_friendships = []
+
+        for user in range(1, self.last_id + 1):
+            for friend in range(user + 1, self.last_id + 1):
+                possible_friendship = (user, friend)
+                possible_friendships.append(possible_friendship)
+
+        random.shuffle(possible_friendships)
+        total_friendship = num_users * avg_friendships // 2
+        random_friendship = possible_friendships[:total_friendship]
+
+        for friendship in random_friendship:
+            self.add_friendship(friendship[0], friendship[1])
+
+    def get_friendships(self, user_id):
+        return self.friendships[user_id]
 
     def get_all_social_paths(self, user_id):
         """
@@ -59,6 +84,24 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
+
+        q = Queue()
+        path = [user_id]
+        q.enqueue(path)
+
+        while q.size() > 0:
+            current_path = q.dequeue()
+            new_user_id = current_path[-1]
+
+            if new_user_id not in visited:
+                visited[new_user_id] = current_path
+
+                friends = self.get_friendships(new_user_id)
+                for friend in friends:
+                    path_copy = list(current_path)
+                    path_copy.append(friend)
+                    q.enqueue(path_copy)
+
         return visited
 
 
